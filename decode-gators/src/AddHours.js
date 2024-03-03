@@ -1,13 +1,15 @@
 import './AddHours.css';
 
 function AddHours() {
+    
   return (
     <div className="form">
         <form className = "form" id = "addHoursForm">
             <h2>Add Hours</h2>
             <div class = "question">
+                <p class="errorMsg" id="sectionError"></p>
                 <label for='section'>Section:      </label>
-                <input type='number' id='name' autofocus placeholder="12345"></input>
+                <input type='number' id='section' autofocus placeholder="12345"></input>
             </div>
             <div class = "question">
                 Who is adding hours? 
@@ -24,11 +26,11 @@ function AddHours() {
                 <label for='location'>Location:      </label>
                 <input type='text' id='location' autofocus placeholder="CSE 2311"></input>
             </div>
-            <div class="question">
+            <div class="question time">
                 <label for='startTime'>Start Time:      </label>
                 <input type='time' id='startTime'></input>
             </div>
-            <div class = "question">
+            <div class = "question time">
                 <label for='endTime'>End Time:      </label>
                 <input type='time' id='end'></input>
             </div>

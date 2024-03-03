@@ -22,19 +22,21 @@
     padding: 10px 10px 10px 10px; 
 }
 
-input[type=text]
+input[type=text], input[type=number], input[type=time], select
 {
     background-color: #edf2ff;
-    border: 3px solid #0021A5;
+    border: 1px solid #0021A5;
     border-radius: 5px;
 }
-input[type=text]:focus
+input[type=text]:focus, input[type=number]:focus, input[type=time]:focus
 {
+    outline: none;
     background-color: white;
+    border: 2px solid #0021A5;
 }
 input[type=time]
 {
-    width: 54%;
+    width: 100px;
 }
 
 #addDayOfWeek
@@ -60,4 +62,9 @@ input[type=time]
 {
     background-color: rgba(0, 33, 165);
 
+}
+
+.errorMsg
+{
+    color:red;
 }
