@@ -6,6 +6,7 @@ function AddHours() {
     <div className="form">
         <form className = "form" id = "addHoursForm">
             <h2>Add Hours</h2>
+            <p>Add new hours for your course below. Once submitted, they will be automatically reflected the calendars of anyone enrolled in the section.</p>
             <div class = "question">
                 <p class="errorMsg" id="sectionError"></p>
                 <label for='section'>Section:      </label>
