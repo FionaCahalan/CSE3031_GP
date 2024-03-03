@@ -56,8 +56,13 @@ input[type=time]
     background-color: rgba(0, 33, 165, .5);
     color:white;
     border-radius: 5px;
-}
+    font-family:'Georgia';
 
+}
+pre {
+    font-family:'Georgia';
+
+}
 #submitAddHours:hover
 {
     background-color: rgba(0, 33, 165, .7);
