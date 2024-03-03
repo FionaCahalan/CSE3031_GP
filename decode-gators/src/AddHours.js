@@ -36,18 +36,17 @@ function AddHours() {
                 <input type='time' id='end'></input>
             </div>
             <div class = "question">
-                <pre id='addDayOfWeek'>Day of the Week:    
-                    <select id="dayOfWeek" name="dayOfWeek">
-                        <option value="select">Select</option>
-                        <option value="sunday">Sunday</option>
-                        <option value="monday">Monday</option>
-                        <option value="tuesday">Tuesday</option>
-                        <option value="wednesday">Wednesday</option>
-                        <option value="thursday">Thursday</option>
-                        <option value="friday">Friday</option>
-                        <option value="saturday">Saturday</option>
-                    </select>
-                </pre>
+                Day of the Week:    
+                <select id="dayOfWeek" name="dayOfWeek">
+                    <option value="select">Select</option>
+                    <option value="sunday">Sunday</option>
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                    <option value="saturday">Saturday</option>
+                </select>
             </div>
             <input type = "submit" id='submitAddHours'></input>
         </form>
