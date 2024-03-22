@@ -1,0 +1,83 @@
+.form
+{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content:center;
+    align-items:center;
+    width: 100%;
+    font-size: 1.3rem;
+    
+}
+p {
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+}
+#addHoursForm
+{
+    background-color: white;
+    border-radius: 5px;
+    width: 60%;
+    max-width: 600px;
+}
+
+.question
+{
+    padding: 10px 10px 10px 10px; 
+}
+
+input[type=text], input[type=number], input[type=time], select
+{
+    background-color: #edf2ff;
+    border: 1px solid #0021A5;
+    border-radius: 5px;
+    font-size: 1rem;
+
+}
+input[type=text]:focus, input[type=number]:focus, input[type=time]:focus
+{
+    outline: none;
+    background-color: white;
+    border: 2px solid #0021A5;
+}
+input[type=time]
+{
+    width: 100px;
+}
+
+#addDayOfWeek
+{
+    font-size: 1rem;
+}
+#dayOfWeek
+{
+    margin:5px 5px 5px 5px;
+    padding: 2px;
+}
+#submitAddHours
+{
+    margin: 10px 10px 10px 10px;
+    padding: 5px 14px 5px 14px;
+    font-size: 1rem;
+    background-color: rgba(0, 33, 165, .5);
+    color:white;
+    border-radius: 5px;
+    font-family:'Georgia';
+
+}
+
+#submitAddHours:hover
+{
+    background-color: rgba(0, 33, 165, .7);
+
+}
+#submitAddHours:active
+{
+    background-color: rgba(0, 33, 165);
+
+}
+
+.errorMsg
+{
+    color:red;
+}
