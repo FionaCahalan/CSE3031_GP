@@ -4,18 +4,19 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Signup from './components/Signup';
 import AuthDetails from './components/AuthDetails';
-//import Header from './Header';
+import Header from './Header';
 import AddHours from './AddHours';
 
 function App() {
     return (
         <div className="App">
             <Router>
+                <Header/>
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" />} />
                     <Route path="/login" element={<LoginWithAuthDetails />} />
                     <Route path="/signup" element={<SignupWithAuthDetails />} />
-                    <Route path="/addhours" element={<AddHours/>} />
+                    <Route path="/addhours" element={<AddHours />} />
                 </Routes>
             </Router>
         </div>
