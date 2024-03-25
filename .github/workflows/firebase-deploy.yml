@@ -1,0 +1,39 @@
+name: Build and Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        cd decode-gators
+        npm install
+    - name: Build
+      run: |
+        cd decode-gators
+        npm run build
+      env:
+        apiKey: ${{ secrets.apiKey }}
+        authDomain: ${{ secrets.authDomain }}
+        projectId: ${{ secrets.projectId }}
+        storageBucket: ${{ secrets.storageBucket }}
+        messagingSenderId: ${{ secrets.messagingSenderId }}
+        appId: ${{ secrets.appId }}
+        measurementId: ${{ secrets.measurementId }}
+        CI: false
+    - name: Install Firebase CLI
+      run: |
+        cd decode-gators
+        npm install -g firebase-tools
+    - name: Deploy to Firebase
+      run: |
+        cd decode-gators
+        firebase deploy --only hosting --token ${{ secrets.firebase_token }}
+      env:
+        firebase_token: ${{ secrets.firebase_token }}
