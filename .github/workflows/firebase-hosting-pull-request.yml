@@ -20,6 +20,11 @@ jobs:
           cd decode-gators 
           npm install
 
+      - name: Build Project
+        run: |
+          cd decode-gators
+          npm run build
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
