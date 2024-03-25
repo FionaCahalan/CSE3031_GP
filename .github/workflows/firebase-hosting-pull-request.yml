@@ -16,8 +16,10 @@ jobs:
 
       # Install dependencies
       - name: Install Dependencies
-        run: npm install
-        
+        run: |
+          cd decode-gators 
+          npm install
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

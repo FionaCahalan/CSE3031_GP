@@ -12,13 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Change to the project directory that contains package.json
-      - name: Change to the project directory
-        run: cd decode-gators
-
       # Install dependencies
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd decode-gators 
+          npm install
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
