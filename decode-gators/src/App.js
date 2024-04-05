@@ -6,6 +6,7 @@ import Signup from './components/Signup';
 import AuthDetails from './components/AuthDetails';
 import Header from './Header';
 import AddHours from './AddHours';
+import Calendar from './Calendar';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/login" element={<LoginWithAuthDetails />} />
                     <Route path="/signup" element={<SignupWithAuthDetails />} />
                     <Route path="/addhours" element={<AddHours />} />
+                    <Route path="/calendar" element={<Calendar />} /> 
                 </Routes>
             </Router>
         </div>
