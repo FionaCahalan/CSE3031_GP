@@ -1,12 +1,12 @@
 import './AddHours.css';
 
+import { db } from './firebase';
+import { getDoc, doc, collection, setDoc, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
 function AddHours() {
-    
-
-    const check = (event) => 
+    async function check (event)
     {
         event.preventDefault();
-
+        
         var error = false;
         
         var section = document.getElementById('section').value;
@@ -24,10 +24,10 @@ function AddHours() {
              error = true;
         }
 
-        var location = document.getElementById("location").value;
-        location = location.trim();
+        var newLocation = document.getElementById("location").value;
+        newLocation = newLocation.trim();
         document.getElementById("locationError").textContent = "";
-        if(location === "")
+        if(newLocation === "")
         {
             document.getElementById("locationError").textContent = "*Required: Input the location of office hours";
             error = true;
@@ -46,12 +46,70 @@ function AddHours() {
         if(endTime === "")
         {
             document.getElementById("endTimeError").textContent = "*Required: Input the end time";
+            error = true;
+        }
+
+        var dayOfWeek = document.getElementById("dayOfWeek").value;
+        document.getElementById("dayOfWeekError").textContent = "";
+        if(dayOfWeek === 'select')
+        {
+            document.getElementById("dayOfWeekError").textContent = "*Required: Select a day of week";
+            error = true; 
         }
         if(error)
         {
             return false;
         }
-        return true;
+        
+        document.getElementById("submitError").textContent = "";
+        var email = document.getElementById("name").value;
+        const docRef = doc(db, "sectionNumbers", section);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists())
+        {
+            const profs = await getDocs(collection(docRef, "professors"));
+            var added = false;
+            profs.forEach(async (d) => {
+                if(d.id === email)
+                {
+                    added = true;
+                    const curr = doc(db, "sectionNumbers", section, "professors", email);
+                    console.log(curr.id);
+                    await updateDoc(curr, {
+                        "day":  arrayUnion(dayOfWeek),
+                        "hourEnd": arrayUnion(endTime),
+                        "hourStart": arrayUnion(startTime),
+                        "location": arrayUnion(newLocation),
+                    });
+                }
+            });
+
+            if(!added)
+            {
+                const tas = await getDocs(collection(docRef, "ta"));
+                tas.forEach(async (d) => {
+                    if(d.id === email)
+                    {
+                        added = true;
+                        const curr = doc(db, "sectionNumbers", section, "ta", email);
+                        await updateDoc(curr, {
+                            "day":  arrayUnion(dayOfWeek),
+                            "hourEnd": arrayUnion(endTime),
+                            "hourStart": arrayUnion(startTime),
+                            "location": arrayUnion(newLocation),
+                        });
+                    }
+                });
+            }
+            if(!added)
+            {
+                document.getElementById("submitError").textContent = "*Permission Denied";
+            }
+        } else {
+            document.getElementById("submitError").textContent = "*Section does not exist";
+        }
+
+
     };
   return (
     <div className="form">
@@ -89,7 +147,7 @@ function AddHours() {
                 <input type='time' id='endTime'></input>
             </div>
             <div className = "question">
-                Day of the Week:    
+                <b>Day of the Week:<pre className="errorMsg" id="dayOfWeekError"></pre> </b>
                 <select id="dayOfWeek" name="dayOfWeek">
                     <option value="select">Select</option>
                     <option value="sunday">Sunday</option>
@@ -101,6 +159,7 @@ function AddHours() {
                     <option value="saturday">Saturday</option>
                 </select>
             </div>
+            <p className ="errorMsg" id="submitError"></p>
             <input type = "submit" id='submitAddHours'></input>
         </form>
     </div>
