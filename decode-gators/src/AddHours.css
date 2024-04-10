@@ -4,9 +4,7 @@
     flex-flow: column wrap;
     justify-content:center;
     align-items:center;
-    width: 100%;
     font-size: 1.3rem;
-    
 }
 p {
     margin: 5px 5px 5px 5px;
@@ -16,15 +14,15 @@ p {
 #addHoursForm
 {
     background-color: white;
-    border-radius: 5px;
     width: 60%;
+    border-radius: 5px;
     max-width: 600px;
 }
-
-.question
+.addHoursInstructions
 {
-    padding: 10px 10px 10px 10px; 
+    text-align:center;
 }
+
 
 input[type=text], input[type=number], input[type=time], select
 {
@@ -80,4 +78,17 @@ input[type=time]
 .errorMsg
 {
     color:red;
+    font-size: 13px;
+}
+input[type="radio"] {
+    width:auto;
+}
+.question
+{
+    padding: 10px 10px 10px 10px; 
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items:baseline;
+    align-content: flex-start;
 }

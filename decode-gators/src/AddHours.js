@@ -2,40 +2,93 @@ import './AddHours.css';
 
 function AddHours() {
     
+
+    const check = (event) => 
+    {
+        event.preventDefault();
+
+        var error = false;
+        
+        var section = document.getElementById('section').value;
+        section = section.trim();
+        document.getElementById("sectionError").textContent = "";
+        if(section === "")
+        {
+            document.getElementById("sectionError").textContent = "*Required: Input a section number";
+            error = true; 
+        } else if(section.length !== 5) {
+            document.getElementById("sectionError").textContent = "*Required: Input a 5 digit section number";
+             error = true;
+        } else if(isNaN(section)) {
+            document.getElementById("sectionError").textContent = "*Required: Input a 5 digit section number";
+             error = true;
+        }
+
+        var location = document.getElementById("location").value;
+        location = location.trim();
+        document.getElementById("locationError").textContent = "";
+        if(location === "")
+        {
+            document.getElementById("locationError").textContent = "*Required: Input the location of office hours";
+            error = true;
+        }
+
+        var startTime = document.getElementById("startTime").value;
+        document.getElementById("startTimeError").textContent = "";
+        if(startTime === "")
+        {
+            document.getElementById("startTimeError").textContent = "*Required: Input the start time";
+            error = true; 
+        }
+
+        var endTime = document.getElementById("endTime").value;
+        document.getElementById("endTimeError").textContent = "";
+        if(endTime === "")
+        {
+            document.getElementById("endTimeError").textContent = "*Required: Input the end time";
+        }
+        if(error)
+        {
+            return false;
+        }
+        return true;
+    };
   return (
     <div className="form">
-        <form className = "form" id = "addHoursForm">
-            <h2>Add Hours</h2>
-            <p>Add new hours for your course below. Once submitted, they will be automatically reflected the calendars of anyone enrolled in the section.</p>
-            <div class = "question">
-                <p class="errorMsg" id="sectionError"></p>
-                <label for='section'>Section:      </label>
-                <input type='number' id='section' autofocus placeholder="12345"></input>
+        
+        <form className = "form" id = "addHoursForm" onSubmit={check}>
+            <div className = "addHoursInstructions">
+                <h2>Add Hours</h2>
+                 <p>Add new hours for your course below. Once submitted, they will be automatically reflected the calendars of anyone enrolled in the section.</p>
             </div>
-            <div class = "question">
+            <div className = "question">
+                <label htmlFor='section'>Section:<pre className="errorMsg" id="sectionError"></pre></label>
+                <input type='text' id='section' autoFocus placeholder="12345"></input>
+            </div>
+            <div className = "question">
                 Who is adding hours? 
                 <input type="radio" id="profAddHours" name="whoAddHours" value="prof"></input>
-                <label for="profAddHours">Professor</label>
+                <label htmlFor="profAddHours">Professor</label>
                 <input type="radio" id="taAddHours" name="whoAddHours" value="ta"></input>
-                <label for="taAddHours">TA</label>
+                <label htmlFor="taAddHours">TA</label>
             </div>
-            <div class = "question">
-                <label for='name'>Name:      </label>
-                <input type='text' id='name' autofocus placeholder="Albert"></input>
+            <div className = "question">
+                <label htmlFor='name'>Name:      </label>
+                <input type='text' id='name' autoFocus placeholder="Albert"></input>
             </div>
-            <div class = "question">
-                <label for='location'>Location:      </label>
-                <input type='text' id='location' autofocus placeholder="CSE 2311"></input>
+            <div className = "question">
+                <label htmlFor='location'>Location: <pre className="errorMsg" id="locationError"></pre></label>
+                <input type='text' id='location' autoFocus placeholder="CSE 2311"></input>
             </div>
-            <div class="question time">
-                <label for='startTime'>Start Time:      </label>
+            <div className="question time">
+                <label htmlFor='startTime'>Start Time: <pre className="errorMsg" id="startTimeError"></pre></label>
                 <input type='time' id='startTime'></input>
             </div>
-            <div class = "question time">
-                <label for='endTime'>End Time:      </label>
-                <input type='time' id='end'></input>
+            <div className = "question time">
+                <label htmlFor='endTime'>End Time:  <pre className="errorMsg" id="endTimeError"></pre></label>
+                <input type='time' id='endTime'></input>
             </div>
-            <div class = "question">
+            <div className = "question">
                 Day of the Week:    
                 <select id="dayOfWeek" name="dayOfWeek">
                     <option value="select">Select</option>
