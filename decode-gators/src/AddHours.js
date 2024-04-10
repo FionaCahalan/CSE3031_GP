@@ -1,7 +1,8 @@
 import './AddHours.css';
 
 import { db } from './firebase';
-import { getDoc, doc, collection, setDoc, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+
+import {increment, FieldValue, getDoc, doc, collection, setDoc, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
 function AddHours() {
     async function check (event)
     {
@@ -67,19 +68,43 @@ function AddHours() {
         const docSnap = await getDoc(docRef);
         if(docSnap.exists())
         {
-            const profs = await getDocs(collection(docRef, "professors"));
+            const profs = await getDocs(collection(db, "sectionNumbers", section, "professors"));
             var added = false;
             profs.forEach(async (d) => {
                 if(d.id === email)
                 {
                     added = true;
                     const curr = doc(db, "sectionNumbers", section, "professors", email);
-                    console.log(curr.id);
-                    await updateDoc(curr, {
-                        "day":  arrayUnion(dayOfWeek),
-                        "hourEnd": arrayUnion(endTime),
-                        "hourStart": arrayUnion(startTime),
-                        "location": arrayUnion(newLocation),
+
+                    getDoc(curr).then(async (snapshot)=> {
+                        const index = snapshot.data().index;
+                        const starts = snapshot.data().startTimes;
+                        const ends = snapshot.data().endTimes;
+                        const days = snapshot.data().daysOfWeek;
+                        const locations = snapshot.data().locations;
+                        console.log(starts);
+                        if(index === undefined || index === 0)
+                        {
+                            await updateDoc(curr, {
+                                "daysOfWeek":  arrayUnion(dayOfWeek),
+                                "startTimes": arrayUnion(endTime),
+                                "endTimes": arrayUnion(startTime),
+                                "locations": arrayUnion(newLocation),
+                                index: increment(1)
+                            });
+                        } else {
+                            const finalStarts = [...starts.slice(0, index), startTime, ...starts.slice(index)];
+                            const finalEnds = [...ends.slice(0, index), endTime, ...ends.slice(index)];
+                            const finalDaysOfWeek = [...days.slice(0, index), dayOfWeek, ...days.slice(index)];
+                            const finalLocations = [...locations.slice(0, index), newLocation, ...locations.slice(index)];
+                            await updateDoc(curr, {
+                                "daysOfWeek":  finalDaysOfWeek,
+                                "startTimes": finalStarts,
+                                "endTimes": finalEnds,
+                                "locations": finalLocations,
+                                index: increment(1)
+                            });
+                        }
                     });
                 }
             });
@@ -92,6 +117,7 @@ function AddHours() {
                     {
                         added = true;
                         const curr = doc(db, "sectionNumbers", section, "ta", email);
+                        
                         await updateDoc(curr, {
                             "day":  arrayUnion(dayOfWeek),
                             "hourEnd": arrayUnion(endTime),
@@ -100,6 +126,7 @@ function AddHours() {
                         });
                     }
                 });
+                console.log(":+")
             }
             if(!added)
             {
