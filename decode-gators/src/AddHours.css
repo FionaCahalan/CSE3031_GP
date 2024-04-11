@@ -92,3 +92,8 @@ input[type="radio"] {
     align-items:baseline;
     align-content: flex-start;
 }
+
+#profAddHours
+{
+    font-weight: normal;
+}
