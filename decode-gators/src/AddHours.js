@@ -93,7 +93,7 @@ function AddHours() {
                         const days = snapshot.data().daysOfWeek;
                         const locations = snapshot.data().locations;
                         console.log(starts);
-                        if(index === undefined || index === 0)
+                        if(index === undefined || index <= 0)
                         {
                             await updateDoc(curr, {
                                 "daysOfWeek":  arrayUnion(dayOfWeek),
