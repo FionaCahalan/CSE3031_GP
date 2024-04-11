@@ -8,6 +8,7 @@ import Header from './Header';
 import AddHours from './AddHours';
 import Calendar from './Calendar';
 import DeleteHours from './DeleteHours';
+import Admin from './Admin';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/addhours" element={<AddHours />} />
                     <Route path="/deletehours" element={<DeleteHours />} />
                     <Route path="/calendar" element={<Calendar />} /> 
+                    <Route path="/admin" element={<Admin />} />
                 </Routes>
             </Router>
         </div>
