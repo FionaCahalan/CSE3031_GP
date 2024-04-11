@@ -2,12 +2,22 @@ import './AddHours.css';
 
 import { db } from './firebase';
 
-import {increment, FieldValue, getDoc, doc, collection, setDoc, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+
+import { getAuth } from 'firebase/auth';
 function AddHours() {
     async function check (event)
     {
         event.preventDefault();
         
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if(!user) {
+            document.getElementById("loginError").textContent = "Login Before Adding Hours";
+            return;
+        }
+        document.getElementById("loginError").textContent = "";
+
         var error = false;
         
         var section = document.getElementById('section').value;
@@ -63,7 +73,7 @@ function AddHours() {
         }
         
         document.getElementById("submitError").textContent = "";
-        var email = document.getElementById("name").value;
+        var email = user.email;
         const docRef = doc(db, "sectionNumbers", section);
         const docSnap = await getDoc(docRef);
         if(docSnap.exists())
@@ -117,16 +127,39 @@ function AddHours() {
                     {
                         added = true;
                         const curr = doc(db, "sectionNumbers", section, "ta", email);
-                        
-                        await updateDoc(curr, {
-                            "day":  arrayUnion(dayOfWeek),
-                            "hourEnd": arrayUnion(endTime),
-                            "hourStart": arrayUnion(startTime),
-                            "location": arrayUnion(newLocation),
+    
+                        getDoc(curr).then(async (snapshot)=> {
+                            const index = snapshot.data().index;
+                            const starts = snapshot.data().startTimes;
+                            const ends = snapshot.data().endTimes;
+                            const days = snapshot.data().daysOfWeek;
+                            const locations = snapshot.data().locations;
+                            console.log(starts);
+                            if(index === undefined || index === 0)
+                            {
+                                await updateDoc(curr, {
+                                    "daysOfWeek":  arrayUnion(dayOfWeek),
+                                    "startTimes": arrayUnion(endTime),
+                                    "endTimes": arrayUnion(startTime),
+                                    "locations": arrayUnion(newLocation),
+                                    index: increment(1)
+                                });
+                            } else {
+                                const finalStarts = [...starts.slice(0, index), startTime, ...starts.slice(index)];
+                                const finalEnds = [...ends.slice(0, index), endTime, ...ends.slice(index)];
+                                const finalDaysOfWeek = [...days.slice(0, index), dayOfWeek, ...days.slice(index)];
+                                const finalLocations = [...locations.slice(0, index), newLocation, ...locations.slice(index)];
+                                await updateDoc(curr, {
+                                    "daysOfWeek":  finalDaysOfWeek,
+                                    "startTimes": finalStarts,
+                                    "endTimes": finalEnds,
+                                    "locations": finalLocations,
+                                    index: increment(1)
+                                });
+                            }
                         });
                     }
                 });
-                console.log(":+")
             }
             if(!added)
             {
@@ -145,22 +178,13 @@ function AddHours() {
             <div className = "addHoursInstructions">
                 <h2>Add Hours</h2>
                  <p>Add new hours for your course below. Once submitted, they will be automatically reflected the calendars of anyone enrolled in the section.</p>
+                 <p id="loginError" className="errorMsg"></p>
             </div>
             <div className = "question">
                 <label htmlFor='section'>Section:<pre className="errorMsg" id="sectionError"></pre></label>
                 <input type='text' id='section' autoFocus placeholder="12345"></input>
             </div>
-            <div className = "question">
-                Who is adding hours? 
-                <input type="radio" id="profAddHours" name="whoAddHours" value="prof"></input>
-                <label htmlFor="profAddHours">Professor</label>
-                <input type="radio" id="taAddHours" name="whoAddHours" value="ta"></input>
-                <label htmlFor="taAddHours">TA</label>
-            </div>
-            <div className = "question">
-                <label htmlFor='name'>Name:      </label>
-                <input type='text' id='name' autoFocus placeholder="Albert"></input>
-            </div>
+            
             <div className = "question">
                 <label htmlFor='location'>Location: <pre className="errorMsg" id="locationError"></pre></label>
                 <input type='text' id='location' autoFocus placeholder="CSE 2311"></input>
