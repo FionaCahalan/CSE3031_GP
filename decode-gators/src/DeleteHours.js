@@ -255,7 +255,7 @@ function DeleteHours() {
         <div className = "form " id="deleteHoursHome">
             <div className = "deleteHoursInstructions">
                 <h2>Delete Hours</h2>
-                 <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting awares will delete from both your calendar and student's calendars!</p>
+                 <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting hours will delete from both your calendar and student's calendars!</p>
                  <p style={{fontSize:15}}>Note: If there are no section options, this means you do not have Professor or TA clearance for any courses. Please contact administration to sort out any issues.</p>
             </div>
             <br />
@@ -265,7 +265,7 @@ function DeleteHours() {
         <form className = "form hide" id = "deleteHoursForm" onSubmit={removeHour}>
             <div className = "deleteHoursInstructions">
                 <h2>Delete Hours</h2>
-                 <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting awares will delete from both your calendar and student's calendars!</p>
+                 <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting hours will delete from both your calendar and student's calendars!</p>
                  <p style={{fontSize:15}}>Note: If there are no section options, this means you do not have Professor or TA clearance for any courses. Please contact administration to sort out any issues.</p>
                  <p id="loginError" className="errorMsg"></p>
             </div>
