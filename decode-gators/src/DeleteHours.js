@@ -7,21 +7,19 @@ import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from
 
 import { getAuth } from 'firebase/auth';
 function DeleteHours() {
-     useEffect( () => {        
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if(user) {
-            document.getElementById("loginError").textContent = "";
-            load();            
-        } else {
-            document.getElementById("loginError").textContent = "Login Before Deleting Hours";
-        } 
-        return;
-    });
+    
     async function load ()
     {
         const auth = getAuth();
         const user = auth.currentUser;
+        if(user) {
+            document.getElementById("loginError").textContent = "";
+            console.log(user.email);
+        } else {
+            console.log('here');
+            document.getElementById("loginError").textContent = "Login Before Deleting Hours";
+            return;
+        } 
         var email = user.email;
         const docRef = doc(db, "users", email);
         const docSnap = await getDoc(docRef);
@@ -147,7 +145,7 @@ function DeleteHours() {
                 var options = "<option value='select'>Select</option>";
                 document.getElementById("hour").innerHTML = options; 
                 document.getElementById("hourError").innerText = "No hours for this course";
-            
+                load();
             }
 
         } 
@@ -166,6 +164,12 @@ function DeleteHours() {
         }
         const auth = getAuth();
         const user = auth.currentUser;
+        if(user) {
+            document.getElementById("loginError").textContent = "";
+        } else {
+            document.getElementById("loginError").textContent = "Login Before Deleting Hours";
+            return;
+        } 
         var email = user.email;
         const docRef = doc(db, "sectionNumbers", section);
         const docSnap = await getDoc(docRef);
@@ -240,10 +244,25 @@ function DeleteHours() {
         }
         
    }
+   function goToDelete()
+   {
+        document.getElementById("deleteHoursHome").className = "form hide";
+        document.getElementById("deleteHoursForm").className = "form";
+        load();
+   }
   return (
     <div className="form">
-        
-        <form className = "form" id = "deleteHoursForm" onSubmit={removeHour}>
+        <div className = "form " id="deleteHoursHome">
+            <div className = "deleteHoursInstructions">
+                <h2>Delete Hours</h2>
+                 <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting awares will delete from both your calendar and student's calendars!</p>
+                 <p style={{fontSize:15}}>Note: If there are no section options, this means you do not have Professor or TA clearance for any courses. Please contact administration to sort out any issues.</p>
+            </div>
+            <br />
+            <button onClick={goToDelete}>Continue</button>
+            <br />
+        </div>
+        <form className = "form hide" id = "deleteHoursForm" onSubmit={removeHour}>
             <div className = "deleteHoursInstructions">
                 <h2>Delete Hours</h2>
                  <p>Search through your current hours and delete the ones you will no longer be hosting. BEWARE: Deleting awares will delete from both your calendar and student's calendars!</p>

@@ -11,7 +11,7 @@ p {
     padding: 5px 5px 5px 5px;
     text-align: center;
 }
-#addHoursForm, #deleteHoursForm
+#addHoursForm, #deleteHoursForm, #deleteHoursHome
 {
     background-color: white;
     width: 60%;
@@ -52,7 +52,7 @@ input[type=time]
     margin:5px 5px 5px 5px;
     padding: 2px;
 }
-#submitAddHours, #submitDeleteHours
+#submitAddHours, #submitDeleteHours, button
 {
     margin: 10px 10px 10px 10px;
     padding: 5px 14px 5px 14px;
@@ -64,12 +64,12 @@ input[type=time]
 
 }
 
-#submitAddHours:hover, #submitDeleteHours:hover
+#submitAddHours:hover, #submitDeleteHours:hover, button:hover
 {
     background-color: rgba(0, 33, 165, .7);
 
 }
-#submitAddHours:active, #submitDeleteHours:active
+#submitAddHours:active, #submitDeleteHours:active, button:active
 {
     background-color: rgba(0, 33, 165);
 
@@ -96,4 +96,8 @@ input[type="radio"] {
 #profAddHours
 {
     font-weight: normal;
+}
+.hide
+{
+    display: none;
 }
