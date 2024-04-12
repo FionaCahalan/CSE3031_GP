@@ -1,4 +1,3 @@
-
 .calendar {
   display: flex;
   flex-direction: column;
@@ -10,83 +9,41 @@
   width: 100%;
   max-width: 960px;
   margin: 20px auto;
-  font-size: 1rem;
 }
 
-.weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7 days for a week */
-  gap: 10px;
+.days-grid {
+  display: flex;
+  justify-content: space-between; /* Ensures the days are evenly spaced */
   width: 100%;
-  padding: 10px 0;
 }
 
 .day {
-  background-color: #edf2ff;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  background-color: #edf2ff; /* Light blue background for visibility */
   border: 1px solid #0021A5;
   border-radius: 5px;
-  padding: 50px;
-  text-align: center;
-  position: relative; /* Needed for absolute positioning of events */
+  margin: 5px; /* Adds a small margin around each day box */
 }
 
-.day h3 {
-  color: #0021A5;
-  margin: 0;
-  padding-bottom: 10px;
+.day-name {
+  margin-bottom: 50px; /* Space between the day name and the task boxes */
 }
 
-.event {
-  background-color: #ffffff;
-  border-left: 3px solid #0021A5;
-  padding: 3px 6px;
-  margin-top: 3px;
-  border-radius: 3px;
-  font-size: 0.85rem;
-}
-
-@media (max-width: 768px) {
-  .weekdays {
-    grid-template-columns: repeat(3, 1fr); /* Adjust for smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  .weekdays {
-    grid-template-columns: repeat(1, 1fr); /* Full width on very small screens */
-  }
-}
-
-/* Add this section for your month navigation buttons */
-.month-navigation {
+.tasks-grid {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0px;
+  width: 100%; /* Take up the full width of the .day container */
+  justify-content: space-between; /* Evenly space the task boxes */
 }
 
-.month-navigation button {
-  padding: 10px 20px;
-  background-color: #0021A5; /* University of Florida blue */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.month-navigation button:hover {
-  background-color: #0037d9; /* Lighter blue for hover state */
-}
-
-@media (max-width: 768px) {
-  .month-navigation button {
-    padding: 8px 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .month-navigation button {
-    padding: 6px 10px;
-  }
+.task-box {
+  width: 100%; /* Smaller width to fit 7 boxes */
+  height: 150px; /* Fixed height for the boxes */
+  background-color: #FFFFFF; /* White or another contrasting color */
+  border: 1px solid #AAAAAA; /* Light border for each task box */
+  border-radius: 2px;
 }
