@@ -185,7 +185,6 @@ function DeleteHours() {
                         const curr = doc(db, "sectionNumbers", section, "professors", email);
 
                         getDoc(curr).then(async (snapshot)=> {
-                            const index = snapshot.data().index;
                             const starts = snapshot.data().startTimes;
                             const ends = snapshot.data().endTimes;
                             const days = snapshot.data().daysOfWeek;
@@ -217,7 +216,6 @@ function DeleteHours() {
                             const curr = doc(db, "sectionNumbers", section, "ta", email);
 
                             getDoc(curr).then(async (snapshot)=> {
-                                const index = snapshot.data().index;
                                 const starts = snapshot.data().startTimes;
                                 const ends = snapshot.data().endTimes;
                                 const days = snapshot.data().daysOfWeek;
