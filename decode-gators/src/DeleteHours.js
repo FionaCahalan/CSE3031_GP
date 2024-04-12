@@ -49,6 +49,7 @@ function DeleteHours() {
 
    async function setHours()
    {
+        document.getElementById("hourError").innerText = "";
         var section = document.getElementById('sectionNumber').value;
         var options;
         if(section === 'select')
