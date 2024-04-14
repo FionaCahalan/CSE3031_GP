@@ -3,7 +3,7 @@ import './AddHours.css';
 
 import { db } from './firebase';
 
-import {increment, getDoc, doc, collection, getDocs, updateDoc/*, arrayUnion*/} from 'firebase/firestore';
+import {increment, getDoc, doc, collection, getDocs, updateDoc} from 'firebase/firestore';
 
 import { getAuth } from 'firebase/auth';
 function DeleteHours() {
@@ -50,10 +50,12 @@ function DeleteHours() {
 
    async function setHours()
    {
+        document.getElementById("hourError").innerText = "";
         var section = document.getElementById('sectionNumber').value;
+        var options;
         if(section === 'select')
         {
-            var options = "<option value='select'>Select</option>";
+            options = "<option value='select'>Select</option>";
                 document.getElementById("hour").innerHTML = options; 
             document.getElementById("sectionNumberError").innerText ="*Required: Select the section number first";
             return;
@@ -85,7 +87,7 @@ function DeleteHours() {
                             {
                                 document.getElementById("hourError").innerText = "No hours for this course";
                             } else {
-                                var options = "<option value='select'>Select</option>";
+                                options = "<option value='select'>Select</option>";
                                 for(var i = 0; i < index; i++)
                                 {
                                     options += "<option value= '";
@@ -122,7 +124,7 @@ function DeleteHours() {
                                     document.getElementById("hourError").innerText = "No hours for this course";
                                     return;
                                 } else {
-                                    var options = "<option value='select'>Select</option>";
+                                    options = "<option value='select'>Select</option>";
                                     
                                     for(var i = 0; i < starts.length; i++)
                                     {
@@ -142,7 +144,7 @@ function DeleteHours() {
             }
             if(!added)
             {
-                var options = "<option value='select'>Select</option>";
+                options = "<option value='select'>Select</option>";
                 document.getElementById("hour").innerHTML = options; 
                 document.getElementById("hourError").innerText = "No hours for this course";
                 load();
@@ -185,7 +187,6 @@ function DeleteHours() {
                         const curr = doc(db, "sectionNumbers", section, "professors", email);
 
                         getDoc(curr).then(async (snapshot)=> {
-                            const index = snapshot.data().index;
                             const starts = snapshot.data().startTimes;
                             const ends = snapshot.data().endTimes;
                             const days = snapshot.data().daysOfWeek;
@@ -217,7 +218,6 @@ function DeleteHours() {
                             const curr = doc(db, "sectionNumbers", section, "ta", email);
 
                             getDoc(curr).then(async (snapshot)=> {
-                                const index = snapshot.data().index;
                                 const starts = snapshot.data().startTimes;
                                 const ends = snapshot.data().endTimes;
                                 const days = snapshot.data().daysOfWeek;
