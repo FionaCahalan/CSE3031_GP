@@ -7,6 +7,7 @@ import AuthDetails from './components/AuthDetails';
 import Header from './Header';
 import AddHours from './AddHours';
 import Calendar from './Calendar';
+import Homepage from './components/Homepage';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/signup" element={<SignupWithAuthDetails />} />
                     <Route path="/addhours" element={<AddHours />} />
                     <Route path="/calendar" element={<Calendar />} /> 
+                    <Route path="/home" element={<Homepage />} /> 
                 </Routes>
             </Router>
         </div>
