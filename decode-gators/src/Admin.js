@@ -1,8 +1,8 @@
 import './Admin.css';
 
-import { db } from './firebase';
+//import { db } from './firebase';
 
-import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+//import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
 
 import { getAuth } from 'firebase/auth';
 function Admin() {
