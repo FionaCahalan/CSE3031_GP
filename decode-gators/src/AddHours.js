@@ -1,11 +1,22 @@
 import './AddHours.css';
 
-function AddHours() {
-    
+import { db } from './firebase';
 
-    const check = (event) => 
+import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+
+import { getAuth } from 'firebase/auth';
+function AddHours() {
+    async function check (event)
     {
         event.preventDefault();
+        
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if(!user) {
+            document.getElementById("loginError").textContent = "Login Before Adding Hours";
+            return;
+        }
+        document.getElementById("loginError").textContent = "";
 
         var error = false;
         
@@ -24,10 +35,10 @@ function AddHours() {
              error = true;
         }
 
-        var location = document.getElementById("location").value;
-        location = location.trim();
+        var newLocation = document.getElementById("location").value;
+        newLocation = newLocation.trim();
         document.getElementById("locationError").textContent = "";
-        if(location === "")
+        if(newLocation === "")
         {
             document.getElementById("locationError").textContent = "*Required: Input the location of office hours";
             error = true;
@@ -46,12 +57,126 @@ function AddHours() {
         if(endTime === "")
         {
             document.getElementById("endTimeError").textContent = "*Required: Input the end time";
+            error = true;
+        }
+
+        var dayOfWeek = document.getElementById("dayOfWeek").value;
+        document.getElementById("dayOfWeekError").textContent = "";
+        if(dayOfWeek === 'select')
+        {
+            document.getElementById("dayOfWeekError").textContent = "*Required: Select a day of week";
+            error = true; 
         }
         if(error)
         {
             return false;
         }
-        return true;
+        
+        document.getElementById("submitError").textContent = "";
+        var email = user.email;
+        const docRef = doc(db, "sectionNumbers", section);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists())
+        {
+            const profs = await getDocs(collection(db, "sectionNumbers", section, "professors"));
+            var added = false;
+            profs.forEach(async (d) => {
+                if(d.id === email)
+                {
+                    added = true;
+                    const curr = doc(db, "sectionNumbers", section, "professors", email);
+
+                    getDoc(curr).then(async (snapshot)=> {
+                        const index = snapshot.data().index;
+                        const starts = snapshot.data().startTimes;
+                        const ends = snapshot.data().endTimes;
+                        const days = snapshot.data().daysOfWeek;
+                        const locations = snapshot.data().locations;
+                        console.log(starts);
+                        if(index === undefined || index <= 0)
+                        {
+                            await updateDoc(curr, {
+                                "daysOfWeek":  arrayUnion(dayOfWeek),
+                                "startTimes": arrayUnion(endTime),
+                                "endTimes": arrayUnion(startTime),
+                                "locations": arrayUnion(newLocation),
+                                index: increment(1)
+                            });
+                        } else {
+                            const finalStarts = [...starts.slice(0, index), startTime, ...starts.slice(index)];
+                            const finalEnds = [...ends.slice(0, index), endTime, ...ends.slice(index)];
+                            const finalDaysOfWeek = [...days.slice(0, index), dayOfWeek, ...days.slice(index)];
+                            const finalLocations = [...locations.slice(0, index), newLocation, ...locations.slice(index)];
+                            await updateDoc(curr, {
+                                "daysOfWeek":  finalDaysOfWeek,
+                                "startTimes": finalStarts,
+                                "endTimes": finalEnds,
+                                "locations": finalLocations,
+                                index: increment(1)
+                            });
+                        }
+                    });
+                }
+            });
+
+            if(!added)
+            {
+                const tas = await getDocs(collection(docRef, "ta"));
+                tas.forEach(async (d) => {
+                    if(d.id === email)
+                    {
+                        added = true;
+                        const curr = doc(db, "sectionNumbers", section, "ta", email);
+    
+                        getDoc(curr).then(async (snapshot)=> {
+                            const index = snapshot.data().index;
+                            const starts = snapshot.data().startTimes;
+                            const ends = snapshot.data().endTimes;
+                            const days = snapshot.data().daysOfWeek;
+                            const locations = snapshot.data().locations;
+                            console.log(starts);
+                            if(index === undefined || index === 0)
+                            {
+                                await updateDoc(curr, {
+                                    "daysOfWeek":  arrayUnion(dayOfWeek),
+                                    "startTimes": arrayUnion(endTime),
+                                    "endTimes": arrayUnion(startTime),
+                                    "locations": arrayUnion(newLocation),
+                                    index: increment(1)
+                                });
+                            } else {
+                                const finalStarts = [...starts.slice(0, index), startTime, ...starts.slice(index)];
+                                const finalEnds = [...ends.slice(0, index), endTime, ...ends.slice(index)];
+                                const finalDaysOfWeek = [...days.slice(0, index), dayOfWeek, ...days.slice(index)];
+                                const finalLocations = [...locations.slice(0, index), newLocation, ...locations.slice(index)];
+                                await updateDoc(curr, {
+                                    "daysOfWeek":  finalDaysOfWeek,
+                                    "startTimes": finalStarts,
+                                    "endTimes": finalEnds,
+                                    "locations": finalLocations,
+                                    index: increment(1)
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+            if(!added)
+            {
+                document.getElementById("submitError").textContent = "*Permission Denied";
+            } else {
+                document.getElementById("section").value = "";
+                document.getElementById("location").value = "";
+                document.getElementById("startTime").value = "";
+                document.getElementById("endTime").value = "";
+                document.getElementById("dayOfWeek").value = "select";
+
+            }
+        } else {
+            document.getElementById("submitError").textContent = "*Section does not exist";
+        }
+
+
     };
   return (
     <div className="form">
@@ -60,22 +185,13 @@ function AddHours() {
             <div className = "addHoursInstructions">
                 <h2>Add Hours</h2>
                  <p>Add new hours for your course below. Once submitted, they will be automatically reflected the calendars of anyone enrolled in the section.</p>
+                 <p id="loginError" className="errorMsg"></p>
             </div>
             <div className = "question">
                 <label htmlFor='section'>Section:<pre className="errorMsg" id="sectionError"></pre></label>
                 <input type='text' id='section' autoFocus placeholder="12345"></input>
             </div>
-            <div className = "question">
-                Who is adding hours? 
-                <input type="radio" id="profAddHours" name="whoAddHours" value="prof"></input>
-                <label htmlFor="profAddHours">Professor</label>
-                <input type="radio" id="taAddHours" name="whoAddHours" value="ta"></input>
-                <label htmlFor="taAddHours">TA</label>
-            </div>
-            <div className = "question">
-                <label htmlFor='name'>Name:      </label>
-                <input type='text' id='name' autoFocus placeholder="Albert"></input>
-            </div>
+            
             <div className = "question">
                 <label htmlFor='location'>Location: <pre className="errorMsg" id="locationError"></pre></label>
                 <input type='text' id='location' autoFocus placeholder="CSE 2311"></input>
@@ -89,18 +205,19 @@ function AddHours() {
                 <input type='time' id='endTime'></input>
             </div>
             <div className = "question">
-                Day of the Week:    
+                <b>Day of the Week:<pre className="errorMsg" id="dayOfWeekError"></pre> </b>
                 <select id="dayOfWeek" name="dayOfWeek">
                     <option value="select">Select</option>
-                    <option value="sunday">Sunday</option>
-                    <option value="monday">Monday</option>
-                    <option value="tuesday">Tuesday</option>
-                    <option value="wednesday">Wednesday</option>
-                    <option value="thursday">Thursday</option>
-                    <option value="friday">Friday</option>
-                    <option value="saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
                 </select>
             </div>
+            <p className ="errorMsg" id="submitError"></p>
             <input type = "submit" id='submitAddHours'></input>
         </form>
     </div>

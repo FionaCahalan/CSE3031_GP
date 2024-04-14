@@ -1,24 +1,28 @@
-.form
-{
-    display: flex;
-    flex-flow: column wrap;
-    justify-content:center;
-    align-items:center;
-    font-size: 1.3rem;
-}
+
 p {
     margin: 5px 5px 5px 5px;
     padding: 5px 5px 5px 5px;
     text-align: center;
 }
-#addHoursForm, #deleteHoursForm, #deleteHoursHome
+.admin
 {
+    
+    display: flex;
+    flex-flow: column wrap;
+    justify-content:center;
+    align-items:center;
+    font-size: 1.3rem;
     background-color: white;
     width: 60%;
     border-radius: 5px;
     max-width: 600px;
+    margin:auto;
 }
-.addHoursInstructions, .deleteHoursInstructions
+.form
+{
+    margin:auto;
+}
+#adminInstructions
 {
     text-align:center;
 }
@@ -43,16 +47,8 @@ input[type=time]
     width: 100px;
 }
 
-#addDayOfWeek
-{
-    font-size: 1rem;
-}
-#dayOfWeek
-{
-    margin:5px 5px 5px 5px;
-    padding: 2px;
-}
-#submitAddHours, #submitDeleteHours, button
+
+ button
 {
     margin: 10px 10px 10px 10px;
     padding: 5px 14px 5px 14px;
@@ -64,12 +60,12 @@ input[type=time]
 
 }
 
-#submitAddHours:hover, #submitDeleteHours:hover, button:hover
+button:hover
 {
     background-color: rgba(0, 33, 165, .7);
 
 }
-#submitAddHours:active, #submitDeleteHours:active, button:active
+button:active
 {
     background-color: rgba(0, 33, 165);
 
@@ -93,10 +89,7 @@ input[type="radio"] {
     align-content: flex-start;
 }
 
-#profAddHours
-{
-    font-weight: normal;
-}
+
 .hide
 {
     display: none;
