@@ -1,49 +1,70 @@
+/* Main calendar styling */
 .calendar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* White background for the calendar */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   padding: 20px;
-  width: 100%;
-  max-width: 960px;
-  margin: 20px auto;
+  width: 90%;
+  max-width: 960px; /* Maximum width to maintain layout integrity */
+  margin: 20px auto; /* Center the calendar horizontally */
+  font-family: 'Arial', sans-serif; /* Clean, readable font */
 }
 
-.days-grid {
-  display: flex;
-  justify-content: space-between; /* Ensures the days are evenly spaced */
-  width: 100%;
-}
-
-.day {
-  flex-grow: 1;
+/* Styling for each day of the week */
+.days-grid .day {
+  flex: 1 1 100%; /* Full width on smaller screens, adjust below for larger screens */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 10px;
-  background-color: #edf2ff; /* Light blue background for visibility */
-  border: 1px solid #0021A5;
-  border-radius: 5px;
-  margin: 5px; /* Adds a small margin around each day box */
+  margin: 10px;
+  background-color: #f0f0f0; /* Light gray background for each day block */
+  border: 1px solid #d3d3d3; /* Slight border for definition */
+  border-radius: 5px; /* Rounded corners for a soft look */
+  min-height: 150px; /* Minimum height for uniformity */
 }
 
+/* Header for each day */
 .day-name {
-  margin-bottom: 50px; /* Space between the day name and the task boxes */
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333; /* Dark gray for contrast */
+  margin-bottom: 15px; /* Space between the day name and office hour entries */
 }
 
-.tasks-grid {
+/* Container for office hours entries */
+.day .tasks-grid {
+  width: 100%;
   display: flex;
-  width: 100%; /* Take up the full width of the .day container */
-  justify-content: space-between; /* Evenly space the task boxes */
+  flex-direction: column;
+  align-items: center;
 }
 
-.task-box {
-  width: 100%; /* Smaller width to fit 7 boxes */
-  height: 150px; /* Fixed height for the boxes */
-  background-color: #FFFFFF; /* White or another contrasting color */
-  border: 1px solid #AAAAAA; /* Light border for each task box */
-  border-radius: 2px;
+/* Styling for individual office hours entries */
+.day .task-box {
+  width: 90%; /* Allow some margin inside the day container */
+  padding: 8px;
+  margin-bottom: 10px; /* Space between entries */
+  background-color: #e3f2fd; /* Light blue background for visibility */
+  border: 1px solid #b1c9e8; /* Matching light blue border */
+  border-radius: 3px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
+  transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+  cursor: pointer; /* Indicates interactiveness */
+}
+
+.task-box:hover {
+  transform: scale(1.03); /* Slight enlargement on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Darker shadow on hover for emphasis */
+}
+
+/* Responsive adjustments for larger screens */
+@media (min-width: 768px) {
+  .days-grid .day {
+      flex: 1 1 20%; /* Adjust size to fit five items per row */
+  }
 }
