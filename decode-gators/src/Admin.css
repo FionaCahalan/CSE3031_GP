@@ -48,7 +48,7 @@ input[type=time]
 }
 
 
- button
+button, .submitButton
 {
     margin: 10px 10px 10px 10px;
     padding: 5px 14px 5px 14px;
@@ -60,12 +60,12 @@ input[type=time]
 
 }
 
-button:hover
+button:hover, .submitButton:hover
 {
     background-color: rgba(0, 33, 165, .7);
 
 }
-button:active
+button:active, .submitButton:active
 {
     background-color: rgba(0, 33, 165);
 
@@ -74,6 +74,11 @@ button:active
 .errorMsg
 {
     color:red;
+    font-size: 13px;
+}
+.successMsg
+{
+    color:green;
     font-size: 13px;
 }
 input[type="radio"] {
@@ -88,9 +93,19 @@ input[type="radio"] {
     align-items:baseline;
     align-content: flex-start;
 }
-
+h3
+{
+    text-align: center;
+}
 
 .hide
 {
     display: none;
+}
+
+label
+{
+    font-size: 18px;
+    
+    font-weight: normal;
 }
