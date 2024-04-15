@@ -11,7 +11,6 @@ const Homepage = () => {
             <MyHomepage />
         </div>
     );
-    
 }
 
 function MyHomepage() {
