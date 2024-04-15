@@ -1,5 +1,6 @@
 import './AddHours.css';
 //import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { db } from './firebase';
 
@@ -7,7 +8,8 @@ import {increment, getDoc, doc, collection, getDocs, updateDoc} from 'firebase/f
 
 import { getAuth } from 'firebase/auth';
 function DeleteHours() {
-    
+    let navigate = useNavigate();
+
     async function load ()
     {
         const auth = getAuth();
@@ -18,6 +20,7 @@ function DeleteHours() {
         } else {
             console.log('here');
             document.getElementById("loginError").textContent = "Login Before Deleting Hours";
+            navigate('/login');
             return;
         } 
         var email = user.email;

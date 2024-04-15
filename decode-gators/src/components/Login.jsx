@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import './Login.css';
 
 const Login = () => {
+    let navigate = useNavigate();  
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,6 +17,7 @@ const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             console.log(userCredential);
+            navigate('/home');
         }).catch((error) => {
             console.log(error);
         });
