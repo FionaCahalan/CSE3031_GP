@@ -1,23 +1,50 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom';
-//import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import './Login.css';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log(userCredential);
-        }).catch((error) => {
-            console.log(error);
-        });
+  const navigate = useNavigate();
+
+  const [authUser, setAuthUser] = useState(null);
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if(user) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+    });
+
+      return () => {
+        listen();
+      }
+  }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+  
+    // If email and password are valid, proceed with signing in
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log('User signed in successfully:', userCredential.user);
+        navigate('/home'); // Navigate to the home page after successful login
+      })
+      .catch((error) => {
+        console.error('Error signing in:', error);
+        setLoginError('Invalid Email/Password');
+      });
+  };
+
+    if(authUser) {
+      navigate('/home');
     }
 
     return (
@@ -41,6 +68,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
               />
+              <p className="error-message">{loginError}</p>
             </div>
             <button className="login-button" type="button" onClick={handleLogin}>
               Sign In

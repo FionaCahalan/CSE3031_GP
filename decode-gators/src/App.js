@@ -18,8 +18,8 @@ function App() {
                 <Header/>
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" />} />
-                    <Route path="/login" element={<LoginWithAuthDetails />} />
-                    <Route path="/signup" element={<SignupWithAuthDetails />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
                     <Route path="/addhours" element={<AddHours />} />
                     <Route path="/deletehours" element={<DeleteHours />} />
                     <Route path="/calendar" element={<Calendar />} /> 
