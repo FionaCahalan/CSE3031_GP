@@ -24,13 +24,43 @@ function MyHomepage() {
       onAuthStateChanged(auth, currentUser => {
         setUser(currentUser);
         if(currentUser){
+
+          async function check(user){
+            var email = user.email;
+            const docRef = doc(db, "users", email);
+            const docSnap = await getDoc(docRef);
+            if(docSnap.exists()){
+              const curr = doc(db, "users", email);
+              getDoc(curr).then(async (snapshot)=> {
+                const classes_is_prof = snapshot.data().Professor;
+                setIsProfessorTA(classes_is_prof.length > 0);
+                if(!isProfessorTA){
+                  const classes_is_TA = snapshot.data().TA;
+                  setIsProfessorTA(classes_is_TA.length > 0);
+                }
+              });
+              console.log("Is Professor: ", isProfessorTA);
+            } else {
+              setIsProfessorTA(false);
+            }
+      
+            const docRef1 = doc(db, "admin", email);
+            const docSnap1 = await getDoc(docRef1);
+            if(docSnap1.exists()){
+              setIsAdmin(true);
+            } else {
+              setIsAdmin(false);
+            }
+          }
+
+
           check(currentUser);
         } else {
           setIsProfessorTA(false);
           setIsAdmin(false);
         }
       });
-    }, []);
+    }, [auth, isProfessorTA]);
   
     function handleClick(path) {
       navigate(path);
@@ -40,34 +70,6 @@ function MyHomepage() {
       signOut(auth).then(() => {
         console.log('sign out successful')
       }).catch(error => console.log(error))
-    }
-
-    async function check(user){
-      var email = user.email;
-      const docRef = doc(db, "users", email);
-      const docSnap = await getDoc(docRef);
-      if(docSnap.exists()){
-        const curr = doc(db, "users", email);
-        getDoc(curr).then(async (snapshot)=> {
-          const classes_is_prof = snapshot.data().Professor;
-          setIsProfessorTA(classes_is_prof.length > 0);
-          if(!isProfessorTA){
-            const classes_is_TA = snapshot.data().TA;
-            setIsProfessorTA(classes_is_TA.length > 0);
-          }
-        });
-        console.log("Is Professor: ", isProfessorTA);
-      } else {
-        setIsProfessorTA(false);
-      }
-
-      const docRef1 = doc(db, "admin", email);
-      const docSnap1 = await getDoc(docRef1);
-      if(docSnap1.exists()){
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
     }
 
     return (
