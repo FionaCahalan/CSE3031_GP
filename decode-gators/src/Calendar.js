@@ -18,6 +18,26 @@ const Calendar = () => {
         const userData = docSnap.data();
         const sections = [...new Set([...userData.Professor, ...userData.Student, ...userData.TA])];
         console.log("Sections extracted from user data:", sections);
+        
+        
+        async function fetchOfficeHours(sections) {
+          let allHoursData = {
+            'Sunday': [], 'Monday': [], 'Tuesday': [], 'Wednesday': [],
+            'Thursday': [], 'Friday': [], 'Saturday': []
+          };
+      
+          for (const section of sections) {
+            // Fetch from professors subcollection
+            await fetchSubCollectionHours(section, "professors", allHoursData);
+            // Fetch from TAs subcollection
+            await fetchSubCollectionHours(section, "TAs", allHoursData);
+          }
+      
+          console.log("All office hours data:", allHoursData);  // Log the final structure of allHoursData
+          setOfficeHours(allHoursData);
+        }
+        
+        
         fetchOfficeHours(sections);
       } else {
         console.error("No document found for the user:", testEmail);
@@ -26,23 +46,6 @@ const Calendar = () => {
 
     fetchUserDataAndSections();
   }, []);
-
-  async function fetchOfficeHours(sections) {
-    let allHoursData = {
-      'Sunday': [], 'Monday': [], 'Tuesday': [], 'Wednesday': [],
-      'Thursday': [], 'Friday': [], 'Saturday': []
-    };
-
-    for (const section of sections) {
-      // Fetch from professors subcollection
-      await fetchSubCollectionHours(section, "professors", allHoursData);
-      // Fetch from TAs subcollection
-      await fetchSubCollectionHours(section, "TAs", allHoursData);
-    }
-
-    console.log("All office hours data:", allHoursData);  // Log the final structure of allHoursData
-    setOfficeHours(allHoursData);
-  }
 
   async function fetchSubCollectionHours(section, subcollection, allHoursData) {
     const ref = collection(db, "sectionNumbers", section, subcollection);
