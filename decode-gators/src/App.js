@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 // Components
 import Login from './components/Login';
 import Signup from './components/Signup';
-import AuthDetails from './components/AuthDetails';
+//import AuthDetails from './components/AuthDetails';
 import Header from './Header';
 import AddHours from './AddHours';
 import Calendar from './Calendar';
@@ -18,8 +18,8 @@ function App() {
                 <Header/>
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" />} />
-                    <Route path="/login" element={<LoginWithAuthDetails />} />
-                    <Route path="/signup" element={<SignupWithAuthDetails />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
                     <Route path="/addhours" element={<AddHours />} />
                     <Route path="/deletehours" element={<DeleteHours />} />
                     <Route path="/calendar" element={<Calendar />} /> 
@@ -30,7 +30,7 @@ function App() {
         </div>
     );
 }
-
+/*
 // Component for Login route with AuthDetails included
 function LoginWithAuthDetails() {
     return (
@@ -50,5 +50,6 @@ function SignupWithAuthDetails() {
         </>
     );
 }
+*/
 
 export default App;

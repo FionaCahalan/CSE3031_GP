@@ -1,4 +1,5 @@
 import './AddHours.css';
+import { useNavigate } from 'react-router-dom';
 
 import { db } from './firebase';
 
@@ -6,6 +7,7 @@ import {increment, getDoc, doc, collection, getDocs, updateDoc, arrayUnion} from
 
 import { getAuth } from 'firebase/auth';
 function AddHours() {
+    let navigate = useNavigate();
     async function check (event)
     {
         event.preventDefault();
@@ -14,6 +16,7 @@ function AddHours() {
         const user = auth.currentUser;
         if(!user) {
             document.getElementById("loginError").textContent = "Login Before Adding Hours";
+            navigate('/login');
             return;
         }
         document.getElementById("loginError").textContent = "";
