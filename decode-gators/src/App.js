@@ -30,7 +30,7 @@ function App() {
         </div>
     );
 }
-
+/*
 // Component for Login route with AuthDetails included
 function LoginWithAuthDetails() {
     return (
@@ -50,5 +50,6 @@ function SignupWithAuthDetails() {
         </>
     );
 }
+*/
 
 export default App;
