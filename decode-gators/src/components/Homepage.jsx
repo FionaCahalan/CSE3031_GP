@@ -17,7 +17,8 @@ function MyHomepage() {
     let navigate = useNavigate();
     const auth = getAuth();
     const [user, setUser] = useState(null);
-    const [isProfessorTA, setIsProfessorTA] = useState(false);
+    const [isProfessor, setisProfessor] = useState(false);
+    const [isTA, setisTA] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
@@ -33,15 +34,16 @@ function MyHomepage() {
               const curr = doc(db, "users", email);
               getDoc(curr).then(async (snapshot)=> {
                 const classes_is_prof = snapshot.data().Professor;
-                setIsProfessorTA(classes_is_prof.length > 0);
-                if(!isProfessorTA){
-                  const classes_is_TA = snapshot.data().TA;
-                  setIsProfessorTA(classes_is_TA.length > 0);
+                setisProfessor(classes_is_prof.length > 0);
+                const classes_is_TA = snapshot.data().TA;
+                if(!isProfessor){
+                  setisProfessor(classes_is_TA.length > 0);
                 }
+                setisTA(classes_is_TA.length > 0);
               });
-              console.log("Is Professor: ", isProfessorTA);
+              console.log("Is Professor: ", isProfessor);
             } else {
-              setIsProfessorTA(false);
+              setisProfessor(false);
             }
       
             const docRef1 = doc(db, "admin", email);
@@ -56,11 +58,11 @@ function MyHomepage() {
 
           check(currentUser);
         } else {
-          setIsProfessorTA(false);
+          setisProfessor(false);
           setIsAdmin(false);
         }
       });
-    }, [auth, isProfessorTA]);
+    }, [auth, isProfessor]);
   
     function handleClick(path) {
       navigate(path);
@@ -81,20 +83,16 @@ function MyHomepage() {
           <>
           <button className = "nav-button" type="button" onClick={userSignOut}>Sign Out</button>
 
-          {isProfessorTA ? (
-            <>
-            <button className = "nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>
-            <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
-            </>
+          {!isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
+          {isTA && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
+          {isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
+
+          {isAdmin ? (
+            <button className="nav-button" type="button" onClick={() => handleClick('/admin')}>Admin</button>
           ) : (
-            <>
-            {isAdmin ? (
-              <button className="nav-button" type="button" onClick={() => handleClick('/admin')}>Admin</button>
-            ) :(
-              <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
-            )}
-            </>
+            <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
           )}
+
           </>
         )}
       </div>
