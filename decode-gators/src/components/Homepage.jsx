@@ -83,14 +83,16 @@ function MyHomepage() {
           <>
           <button className = "nav-button" type="button" onClick={userSignOut}>Sign Out</button>
 
-          {!isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
           {isTA && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
           {isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
 
           {isAdmin ? (
             <button className="nav-button" type="button" onClick={() => handleClick('/admin')}>Admin</button>
           ) : (
+            <>
             <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
+            {!isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
+            </>
           )}
 
           </>
