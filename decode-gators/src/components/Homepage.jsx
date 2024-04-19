@@ -30,22 +30,23 @@ function MyHomepage() {
             var email = user.email;
             const docRef = doc(db, "users", email);
             const docSnap = await getDoc(docRef);
+            console.log("user email ", email);
             if(docSnap.exists()){
               const curr = doc(db, "users", email);
               getDoc(curr).then(async (snapshot)=> {
-                const classes_is_prof = snapshot.data().Professor;
-                setisProfessor(classes_is_prof.length > 0);
-                const classes_is_TA = snapshot.data().TA;
-                if(!isProfessor){
-                  setisProfessor(classes_is_TA.length > 0);
-                }
-                setisTA(classes_is_TA.length > 0);
+                const classes_is_prof = snapshot.data().Professor || [];
+                setisProfessor(classes_is_prof?.length > 0);
+                const classes_is_TA = snapshot.data().TA || [];
+                setisTA(classes_is_TA?.length > 0);
               });
-              console.log("Is Professor: ", isProfessor);
             } else {
               setisProfessor(false);
+              setisTA(false);
             }
-      
+
+            console.log("Is Professor: ", isProfessor);
+            console.log("Is TA: ", isTA);
+
             const docRef1 = doc(db, "admin", email);
             const docSnap1 = await getDoc(docRef1);
             if(docSnap1.exists()){
@@ -62,7 +63,7 @@ function MyHomepage() {
           setIsAdmin(false);
         }
       });
-    }, [auth, isProfessor]);
+    }, [auth, isProfessor, isTA]);
   
     function handleClick(path) {
       navigate(path);
@@ -83,7 +84,7 @@ function MyHomepage() {
           <>
           <button className = "nav-button" type="button" onClick={userSignOut}>Sign Out</button>
 
-          {isTA && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
+          {isTA && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
           {isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
 
           {isAdmin ? (
