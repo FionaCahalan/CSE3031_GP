@@ -49,7 +49,7 @@ const Calendar = () => {
     }
 
     fetchUserDataAndSections();
-  }, []);
+  }, [testEmail]);
 
   async function fetchSubCollectionHours(section, subcollection, allHoursData) {
     const ref = collection(db, "sectionNumbers", section, subcollection);
