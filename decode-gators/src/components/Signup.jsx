@@ -57,7 +57,7 @@ const Signup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         console.log('User signed up successfully:', userCredential.user);
-        await setDoc(doc(db, "users", email), {Professor: [], Student: [], TA: []});
+        await setDoc(doc(db, "users", email.toLowerCase()), {Professor: [], Student: [], TA: []});
         navigate('/home'); // Navigate to the home page after successful signup
       })
       .catch((error) => {
