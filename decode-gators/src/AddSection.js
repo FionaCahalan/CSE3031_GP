@@ -66,7 +66,11 @@ function AddSection() {
         {
           const curr = doc(db, "users", email);
           getDoc(curr).then(async (snapshot)=> {
+            console.log("HERE");
+            console.log(email);
             const courses = snapshot.data().Student;
+            console.log("THERE");
+
             if(courses.length === 0)
             {
               await updateDoc(curr, {

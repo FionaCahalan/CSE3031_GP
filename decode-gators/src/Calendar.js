@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './Calendar.css';
 import { db } from './firebase'; // Ensure this path is correct
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { getAuth } from 'firebase/auth';
 
 const Calendar = () => {
   const [officeHours, setOfficeHours] = useState({});
-  const testEmail = "sofia.lynch@ufl.edu"; // Hardcoded for testing
-
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const testEmail = user.email; // Hardcoded for testing
+  console.log(testEmail);
   useEffect(() => {
     async function fetchUserDataAndSections() {
       console.log("Attempting to fetch user data for:", testEmail);
@@ -17,6 +20,7 @@ const Calendar = () => {
         console.log("Document found, data:", docSnap.data());
         const userData = docSnap.data();
         const sections = [...new Set([...userData.Professor, ...userData.Student, ...userData.TA])];
+        
         console.log("Sections extracted from user data:", sections);
         
         
@@ -30,7 +34,7 @@ const Calendar = () => {
             // Fetch from professors subcollection
             await fetchSubCollectionHours(section, "professors", allHoursData);
             // Fetch from TAs subcollection
-            await fetchSubCollectionHours(section, "TAs", allHoursData);
+            await fetchSubCollectionHours(section, "ta", allHoursData);
           }
       
           console.log("All office hours data:", allHoursData);  // Log the final structure of allHoursData
