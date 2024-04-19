@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 //import AuthDetails from './components/AuthDetails';
 import Header from './Header';
+import AddSection from './AddSection';
 import AddHours from './AddHours';
 import Calendar from './Calendar';
 import Homepage from './components/Homepage';
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/" element={<Navigate to="/login" />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path='/addsection' element={<AddSection /> } />
                     <Route path="/addhours" element={<AddHours />} />
                     <Route path="/deletehours" element={<DeleteHours />} />
                     <Route path="/calendar" element={<Calendar />} /> 
