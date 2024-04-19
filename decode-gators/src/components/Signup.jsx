@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
-import { auth } from '../firebase';
+import { db, auth } from '../firebase';
 import { onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 
 import './Signup.css';
 
@@ -54,8 +55,9 @@ const Signup = () => {
 
     // If email and password are valid, proceed with creating the user account
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         console.log('User signed up successfully:', userCredential.user);
+        await setDoc(doc(db, "users", email), {Professor: [], Student: [], TA: []});
         navigate('/home'); // Navigate to the home page after successful signup
       })
       .catch((error) => {
