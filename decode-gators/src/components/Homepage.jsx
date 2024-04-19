@@ -17,7 +17,8 @@ function MyHomepage() {
     let navigate = useNavigate();
     const auth = getAuth();
     const [user, setUser] = useState(null);
-    const [isProfessorTA, setIsProfessorTA] = useState(false);
+    const [isProfessor, setisProfessor] = useState(false);
+    const [isTA, setisTA] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
@@ -29,21 +30,23 @@ function MyHomepage() {
             var email = user.email;
             const docRef = doc(db, "users", email);
             const docSnap = await getDoc(docRef);
+            console.log("user email ", email);
             if(docSnap.exists()){
               const curr = doc(db, "users", email);
               getDoc(curr).then(async (snapshot)=> {
-                const classes_is_prof = snapshot.data().Professor;
-                setIsProfessorTA(classes_is_prof.length > 0);
-                if(!isProfessorTA){
-                  const classes_is_TA = snapshot.data().TA;
-                  setIsProfessorTA(classes_is_TA.length > 0);
-                }
+                const classes_is_prof = snapshot.data().Professor || [];
+                setisProfessor(classes_is_prof?.length > 0);
+                const classes_is_TA = snapshot.data().TA || [];
+                setisTA(classes_is_TA?.length > 0);
               });
-              console.log("Is Professor: ", isProfessorTA);
             } else {
-              setIsProfessorTA(false);
+              setisProfessor(false);
+              setisTA(false);
             }
-      
+
+            console.log("Is Professor: ", isProfessor);
+            console.log("Is TA: ", isTA);
+
             const docRef1 = doc(db, "admin", email);
             const docSnap1 = await getDoc(docRef1);
             if(docSnap1.exists()){
@@ -56,11 +59,11 @@ function MyHomepage() {
 
           check(currentUser);
         } else {
-          setIsProfessorTA(false);
+          setisProfessor(false);
           setIsAdmin(false);
         }
       });
-    }, [auth, isProfessorTA]);
+    }, [auth, isProfessor, isTA]);
   
     function handleClick(path) {
       navigate(path);
@@ -81,20 +84,18 @@ function MyHomepage() {
           <>
           <button className = "nav-button" type="button" onClick={userSignOut}>Sign Out</button>
 
-          {isProfessorTA ? (
-            <>
-            <button className = "nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>
-            <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
-            </>
+          {isTA && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
+          {isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addhours')}>Add Office Hours</button>)}
+
+          {isAdmin ? (
+            <button className="nav-button" type="button" onClick={() => handleClick('/admin')}>Admin</button>
           ) : (
             <>
-            {isAdmin ? (
-              <button className="nav-button" type="button" onClick={() => handleClick('/admin')}>Admin</button>
-            ) :(
-              <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
-            )}
+            <button className="nav-button" type="button" onClick={() => handleClick('/calendar')}>Calendar</button>
+            {!isProfessor && (<button className="nav-button" type="button" onClick={() => handleClick('/addsection')}>Add Section</button>)}
             </>
           )}
+
           </>
         )}
       </div>
