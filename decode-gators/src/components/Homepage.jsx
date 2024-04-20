@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { db } from './../firebase';
-import { getDoc, doc/*, collection, getDocs*/} from 'firebase/firestore';
+import { getDoc, doc} from 'firebase/firestore';
 import './Homepage.css';
 
 const Homepage = () => {
@@ -31,9 +31,11 @@ function MyHomepage() {
             const docRef = doc(db, "users", email);
             const docSnap = await getDoc(docRef);
             console.log("user email ", email);
+            //looks at arrays in users collection to determine if user is TA or Professor
             if(docSnap.exists()){
               const curr = doc(db, "users", email);
               getDoc(curr).then(async (snapshot)=> {
+                //if Professor array exists, else assign to empty array
                 const classes_is_prof = snapshot.data().Professor || [];
                 setisProfessor(classes_is_prof?.length > 0);
                 const classes_is_TA = snapshot.data().TA || [];
@@ -47,6 +49,7 @@ function MyHomepage() {
             console.log("Is Professor: ", isProfessor);
             console.log("Is TA: ", isTA);
 
+            //looks in admin document to see if user is admin
             const docRef1 = doc(db, "admin", email);
             const docSnap1 = await getDoc(docRef1);
             if(docSnap1.exists()){
@@ -55,7 +58,6 @@ function MyHomepage() {
               setIsAdmin(false);
             }
           }
-
 
           check(currentUser);
         } else {
@@ -79,8 +81,10 @@ function MyHomepage() {
       <div>        
         
         {!user ? (
+          //if not user, gets login button
           <button className="nav-button" type="button" onClick={() => handleClick('/login')}>Login</button>
         ) : (
+          //determins which buttons to show depending on if they're a admin, student, professor, or TA
           <>
           <button className = "nav-button" type="button" onClick={userSignOut}>Sign Out</button>
 
