@@ -100,8 +100,8 @@ function AddHours() {
                         {
                             await updateDoc(curr, {
                                 "daysOfWeek":  arrayUnion(dayOfWeek),
-                                "startTimes": arrayUnion(endTime),
-                                "endTimes": arrayUnion(startTime),
+                                "startTimes": arrayUnion(startTime),
+                                "endTimes": arrayUnion(endTime),
                                 "locations": arrayUnion(newLocation),
                                 index: increment(1)
                             });
