@@ -101,19 +101,18 @@ function DeleteHours() {
                         const curr = doc(db, "sectionNumbers", section, "professors", email);
 
                         getDoc(curr).then(async (snapshot)=> {
-                            const index = snapshot.data().index;
                             const starts = snapshot.data().startTimes;
                             const ends = snapshot.data().endTimes;
                             const days = snapshot.data().daysOfWeek;
                             const locations = snapshot.data().locations;
                             //Prints error if no hours offered for the section number
-                            if(index === undefined || index === 0)
+                            if(starts === undefined || starts.length === 0)
                             {
                                 document.getElementById("hourError").innerText = "No hours for this course";
                             } else {
                                 //Creates dropdown with all the options to delete
                                 options = "<option value='select'>Select</option>";
-                                for(var i = 0; i < index; i++)
+                                for(var i = 0; i < starts.length; i++)
                                 {
                                     options += "<option value= '";
                                     options += i; 
@@ -142,13 +141,12 @@ function DeleteHours() {
                             const curr = doc(db, "sectionNumbers", section, "ta", email);
 
                             getDoc(curr).then(async (snapshot)=> {
-                                const index = snapshot.data().index;
                                 const starts = snapshot.data().startTimes;
                                 const ends = snapshot.data().endTimes;
                                 const days = snapshot.data().daysOfWeek;
                                 const locations = snapshot.data().locations;
                                 //If no hours offered, prints error message
-                                if(index === undefined || index === 0)
+                                if(starts === undefined || starts.length === 0)
                                 {
                                     document.getElementById("hourError").innerText = "No hours for this course";
                                     return;
