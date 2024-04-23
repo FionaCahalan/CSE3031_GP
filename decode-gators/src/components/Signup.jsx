@@ -7,20 +7,23 @@ import { setDoc, doc } from "firebase/firestore";
 import './Signup.css';
 
 const Signup = () => {
+  // States & Setters
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
+  const [authUser, setAuthUser] = useState(null);
   const navigate = useNavigate();
 
-  const [authUser, setAuthUser] = useState(null);
-
+  // Listener function to determine user validity
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
+      // If user signed in, assign authenticated user to its
+      // correct profile
       if(user) {
         setAuthUser(user);
       } else {
+        // Else set to null user
         setAuthUser(null);
       }
     });
@@ -30,6 +33,7 @@ const Signup = () => {
       }
   }, []);
 
+  // Signup Handler (Button)
   const handleSignup = (e) => {
     e.preventDefault();
 
@@ -57,6 +61,7 @@ const Signup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         console.log('User signed up successfully:', userCredential.user);
+        // Create field for the user with blank arrays for professor, student and TA
         await setDoc(doc(db, "users", email.toLowerCase()), {Professor: [], Student: [], TA: []});
         navigate('/home'); // Navigate to the home page after successful signup
       })
@@ -65,6 +70,8 @@ const Signup = () => {
       });
   };
 
+  // If user already signed in on signup page,
+  // send user to home page
   if(authUser) {
     navigate('/home');
   }

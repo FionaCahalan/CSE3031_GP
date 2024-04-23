@@ -9,11 +9,15 @@ function Header() {
 
   const [authUser, setAuthUser] = useState(null);
 
+  // Listener function to determine user validity
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
+      // If user signed in, assign authenticated user to its
+      // correct profile
       if(user) {
         setAuthUser(user);
       } else {
+        // Else set to null user
         setAuthUser(null);
       }
     });
@@ -23,15 +27,17 @@ function Header() {
       }
   }, []);
 
+  // Signout Handler (Button)
   const handleSignout = async () => {
     try {
-      await signOut(auth); // Call the signout function from your authentication library
+      await signOut(auth); // Call the signout function
       navigate('/login'); // Navigate to the login page
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
 
+  // Home navigation (Button)
   const handleHome = async () => {
     navigate('/home');
   };
