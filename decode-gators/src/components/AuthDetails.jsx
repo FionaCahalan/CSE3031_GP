@@ -6,11 +6,15 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 const AuthDetails = () => {
   const [authUser, setAuthUser] = useState(null);
 
+  // Listener function to determine user validity
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
+      // If user signed in, assign authenticated user to its
+      // correct profile
       if(user) {
         setAuthUser(user);
       } else {
+        // Else set to null user
         setAuthUser(null);
       }
     });
@@ -20,7 +24,9 @@ const AuthDetails = () => {
       }
   }, []);
 
+    // User sign out (Button)
     const userSignOut = () => {
+      // Sign out user, then print according message
       signOut(auth).then(() => {
         console.log('sign out successful')
       }).catch(error => console.log(error))

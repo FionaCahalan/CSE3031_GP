@@ -8,14 +8,18 @@ import { getAuth } from 'firebase/auth';
 
 
 function AddSection() {
-  let navigate = useNavigate();
+  // States & Setters
   const [authUser, setAuthUser] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
+      // If user signed in, assign authenticated user to its
+      // correct profile
       if(user) {
         setAuthUser(user);
       } else {
+        // Else set to null user
         setAuthUser(null);
       }
     });
@@ -25,33 +29,40 @@ function AddSection() {
       }
   }, []);
 
-  if(!authUser)
+  // If user not signed in on addsection page,
+  // send user to login page
+  if(authUser === null)
   {
     navigate('/login');
   }
 
+  // Add Section submission (Button)
   async function check(event) {
     event.preventDefault();
         
         const auth = getAuth();
         const user = auth.currentUser;
+        // If user not signed in, send to login
         if(!user) {
-            await navigate('/login');
+            navigate('/login');
             return;
         }
 
+        // Input validation
         var error = false;
-        
         var section = document.getElementById('section').value;
         section = section.trim();
+        // No input for section
         if(section === "")
         {
           document.getElementById("sectionError").textContent = "*Required: Input a section number";
           error = true; 
         } else if(section.length !== 5) {
+          // Section input not 5 characters long
           document.getElementById("sectionError").textContent = "*Required: Input a 5 digit section number";
           error = true;
         } else if(isNaN(section)) {
+          // Section input not a number
           document.getElementById("sectionError").textContent = "*Required: Input a 5 digit section number";
           error = true;
         }
@@ -59,6 +70,8 @@ function AddSection() {
         {
             return false;
         }
+
+        // Adding section to user's profile as student
         var email = user.email;
         const docRef = doc(db, "sectionNumbers", section);
         const docSnap = await getDoc(docRef);
@@ -71,6 +84,7 @@ function AddSection() {
             const courses = snapshot.data().Student;
             console.log("THERE");
 
+            // If first course, begin array with first section
             if(courses.length === 0)
             {
               await updateDoc(curr, {
@@ -78,6 +92,7 @@ function AddSection() {
               });
             } else
             {
+              // Else apply union to previous field and new section
               await updateDoc(curr, {
                 Student: arrayUnion.apply(this, [section])
               });
